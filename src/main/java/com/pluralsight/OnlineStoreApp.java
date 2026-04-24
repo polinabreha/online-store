@@ -111,9 +111,11 @@ public class OnlineStoreApp {
                         System.out.println("1. Check Out");
                         System.out.println("2. Remove product from cart");
                         System.out.println("3. Go Back");
+                        System.out.print("Enter your choice: ");
                         int choice2 = input.nextInt();
+                        input.nextLine();
                         double total = 0;
-                        double change = 0.00;
+                        double change = 0;
 
                         switch (choice2) {
                             case 1:
@@ -131,18 +133,17 @@ public class OnlineStoreApp {
                                       System.out.println("Not enough! You need $" + (total - cashAmount) + " more");
                                       System.out.println("1 - Try again");
                                       System.out.println("2 - Go back");
+                                      System.out.println("Enter your choice: ");
+                                      input.nextLine();
                                       int retryChoice = input.nextInt();
-                                      if(retryChoice == 2){
+                                      if(retryChoice == 1){
+                                          System.out.print("Enter cash amount: $");
+                                          cashAmount = input.nextDouble();
+                                      } else {
                                           break;
                                       }
-                                  } else if (cashAmount > total) {
+                                  } else  {
                                       change = cashAmount - total;
-                                      System.out.println("The change is : $ " + change);
-                                      System.out.println("Thank you for using our store.");
-                                  } else if (cashAmount == total) {
-                                      System.out.println("The change is : $ " + change);
-                                      System.out.println("Thank you for using our store.");
-                                  }else {
                                       LocalDateTime today = LocalDateTime.now();
                                       DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
                                       System.out.println("-----RECEIPT-----");
@@ -157,6 +158,7 @@ public class OnlineStoreApp {
 
                                       paymentSuccess = true;
                                       cartList.clear();
+                                      productScreen2 = false;
                                   }
 
                               }
@@ -227,7 +229,7 @@ public class OnlineStoreApp {
     public static ArrayList<Product> searchByProductPrice (double productPrice) {
         ArrayList<Product> results = new ArrayList <>();
         for(Product product: productList){
-            if(product.getPrice() <= productPrice){
+            if(product.getPrice() == productPrice){
                 results.add(product);
             }
             if (results.isEmpty()){
