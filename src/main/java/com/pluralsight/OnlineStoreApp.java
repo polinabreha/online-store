@@ -280,7 +280,7 @@ public class OnlineStoreApp {
            if (cartQuantity.get(sku) > 1) {
                cartQuantity.put(sku, cartQuantity.get(sku) - 1); // decrease quantity
            } else {
-               cartQuantity.remove(sku); // remove completely
+               cartQuantity.remove(sku);
            }
         cartList.remove(product);
 
