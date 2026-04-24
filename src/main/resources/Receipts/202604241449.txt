@@ -1,0 +1,7 @@
+------RECEIPT------
+Date: 24/04/2026 14:49:25
+--Items--
+CP2123|Wired Backlit Keyboard|21.99|Computers
+Total: $21.99
+Amount Paid: $30.00
+Change: $8.01

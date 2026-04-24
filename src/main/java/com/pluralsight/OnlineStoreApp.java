@@ -1,8 +1,6 @@
 package com.pluralsight;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -49,7 +47,7 @@ public class OnlineStoreApp {
                                 for(Product p : results){
                                     System.out.println(p);
                                 }
-                                break;
+                             break;
 
                             case 2:
                                 System.out.print("Enter product department: ");
@@ -59,7 +57,7 @@ public class OnlineStoreApp {
                                 for(Product p : results2){
                                     System.out.println(p);
                                 }
-                                break;
+                            break;
                             case 3:
                                 System.out.print("Enter product price: ");
                                 double productPrice = input.nextDouble();
@@ -67,7 +65,7 @@ public class OnlineStoreApp {
                                 for(Product p : results3){
                                     System.out.println(p);
                                 }
-                                break;
+                            break;
 
                             case 4:
                                 System.out.print("What product would you like to add to cart?(enter name)");
@@ -81,11 +79,11 @@ public class OnlineStoreApp {
                                     addProductToCart(found.get(0)); // adds the first matched product
                                     System.out.println(found.get(0).getProductName() + " added to cart!");
                                 }
-                                break;
+                            break;
 
                             case 5:
                                 productScreen = false;
-                                break;
+                            break;
 
 
 
@@ -94,7 +92,7 @@ public class OnlineStoreApp {
 
 
 
-                    break;
+                break;
 
 
 
@@ -152,38 +150,39 @@ public class OnlineStoreApp {
                                       for(Product product : cartList){
                                           System.out.println(product);
                                       }
-                                      System.out.println("Total: $" + total);
-                                      System.out.println("Amount Paid: $" + cashAmount);
-                                      System.out.println("Change: $" + change);
+                                      System.out.println("Total: $" + String.format("%.2f", total));
+                                      System.out.println("Amount Paid: $" + String.format("%.2f", cashAmount));
+                                      System.out.println("Change: $" + String.format("%.2f", change));
+                                      saveReceipt(cartList, total, cashAmount, change);
 
                                       paymentSuccess = true;
                                       cartList.clear();
                                       productScreen2 = false;
                                   }
-
                               }
+                              break;
                             case 2:
                                 System.out.print("What item would you like to remove?(enter name)");
-                                input.nextLine();
                                 String itemName = input.nextLine();
-                                ArrayList<Product> found = searchByProductName(itemName);
+                                ArrayList<Product> found = searchCartByName(itemName);
                                 if(found.isEmpty()){
                                     System.out.println("Product not found");
                                 } else{
                                     removeProductFromCart(found.get(0));
                                     System.out.println(found.get(0).getProductName() + " removed from cart!");
                                 }
+                            break;
                             case 3:
                                 productScreen2 = false;
-                                break;
+                            break;
                         }
 
                     }
-                    break;
+                break;
 
                 case 3:
                     run = false;
-                    break;
+                break;
 
             }
 
@@ -227,7 +226,7 @@ public class OnlineStoreApp {
     // user can search the product by department
     public static ArrayList<Product> searchByProductDepartment (String productDepartment) {
         ArrayList<Product> results = new ArrayList <>();
-        for(Product product: cartList){
+        for(Product product: productList){
             if(product.getDepartment().toLowerCase().contains(productDepartment.toLowerCase())){
                 results.add(product);
             }
@@ -246,10 +245,11 @@ public class OnlineStoreApp {
             if(product.getPrice() == productPrice){
                 results.add(product);
             }
-            if (results.isEmpty()){
+        }
+        if (results.isEmpty()){
                 System.out.println("No products found at that price");
             }
-        }
+
         return results;
     }
 
@@ -262,6 +262,36 @@ public class OnlineStoreApp {
        public static void removeProductFromCart(Product product){
         cartList.remove(product);
        }
+
+       public static void saveReceipt(ArrayList<Product> cartList, double total, double cashAmount, double change) throws IOException{
+           LocalDateTime today = LocalDateTime.now();
+           DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+           DateTimeFormatter fileFormat = DateTimeFormatter.ofPattern("yyyyMMddHHmm");
+           String fileName = today.format(fileFormat);
+
+           BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("src/main/resources/Receipts/" + fileName + ".txt"));
+          bufferedWriter.write("------RECEIPT------\n");
+           bufferedWriter.write("Date: " + today.format(dtf) + "\n");
+           bufferedWriter.write("--Items--\n");
+           for (Product product : cartList) {          // <-- make sure this loop is there
+               bufferedWriter.write(product + "\n");
+           }
+           bufferedWriter.write("Total: $" + String.format("%.2f", total) + "\n");
+           bufferedWriter.write("Amount Paid: $" + String.format("%.2f", cashAmount) + "\n");
+           bufferedWriter.write("Change: $" + String.format("%.2f", change) + "\n");
+
+        bufferedWriter.close();
+       }
+
+    public static ArrayList<Product> searchCartByName(String productName) {
+        ArrayList<Product> results = new ArrayList<>();
+        for (Product product : cartList) {
+            if (product.getProductName().toLowerCase().contains(productName.toLowerCase())) {
+                results.add(product);
+            }
+        }
+        return results;
+    }
 
 
 
