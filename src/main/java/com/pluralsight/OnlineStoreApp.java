@@ -3,6 +3,9 @@ package com.pluralsight;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.SQLOutput;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -98,9 +101,75 @@ public class OnlineStoreApp {
 
                 case 2:
                     System.out.println("----Cart----");
+                    System.out.println("--Products:--");
                     for (Product product : cartList) {
                         System.out.println(product);
                     }
+
+                    boolean productScreen2 = true;
+                    while (productScreen2) {
+                        System.out.println("What would you like to do next?");
+                        System.out.println("1. Check Out");
+                        System.out.println("2. Remove product from cart");
+                        System.out.println("3. Go Back");
+                        int choice2 = input.nextInt();
+                        double total = 0;
+                        switch (choice2) {
+                            case 1:
+                                for (Product product : cartList) {
+                                   total += product.getPrice();
+                                }
+                                System.out.println("Your total is : $ " + total);
+
+
+
+
+
+
+
+
+
+                                System.out.print("Enter cash amount : $ ");
+                                input.nextLine();
+                                double change = 0.00;
+                                Double cashAmount = input.nextDouble();
+                                if (cashAmount < total){
+                                    System.out.println("It's not enough money!");
+                                }else if (cashAmount > total){
+                                    change = cashAmount - total;
+                                    System.out.println("The change is : $ " + change);
+                                    System.out.println("Thank you for using our store.");
+                                } else if (cashAmount == total) {
+                                    System.out.println("The change is : $ " + change);
+                                    System.out.println("Thank you for using our store.");
+                                }
+
+                                LocalDateTime today = LocalDateTime.now();
+                                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+                                System.out.println("-----RECEIPT-----");
+                                System.out.println("Date: " + today.format(dtf));
+                                System.out.println("--Items--");
+                                for(Product product : cartList){
+                                    System.out.println(product);
+                                }
+                                System.out.println("Total: $" + total);
+                                System.out.println("Amount Paid: $" + cashAmount);
+                                System.out.println("Change: $" + change);
+
+
+
+                        }
+
+                    }
+
+
+
+
+
+
+
+
+
                     break;
 
                 case 3:
