@@ -4,11 +4,39 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 
 public class OnlineStoreApp {
     public static void main(String[] args) throws IOException {
-        productList = getProductList();
+        boolean run = true;
+        while (run) {
+            Scanner input = new Scanner(System.in);
+            System.out.println("1 - Display Products");
+            System.out.println("2 - Display Cart");
+            System.out.println("3 - Exit");
+            int choice = input.nextInt();
+
+            switch (choice) {
+                case 1:
+                    System.out.println("----Products List----");
+                    productList = getProductList();
+                    break;
+
+                case 2:
+                    System.out.println("----Cart----");
+                    for (Product product : cartList) {
+                        System.out.println(product);
+                    }
+                    break;
+
+                case 3:
+                    run = false;
+                    break;
+
+            }
+
+        }
 
     }
 
@@ -40,7 +68,6 @@ public class OnlineStoreApp {
         }
         return results;
        }
-
 
 // add ad remove methods
     static ArrayList<Product> cartList = new ArrayList<>();
