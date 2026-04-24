@@ -162,7 +162,20 @@ public class OnlineStoreApp {
                                   }
 
                               }
-
+                            case 2:
+                                System.out.print("What item would you like to remove?(enter name)");
+                                input.nextLine();
+                                String itemName = input.nextLine();
+                                ArrayList<Product> found = searchByProductName(itemName);
+                                if(found.isEmpty()){
+                                    System.out.println("Product not found");
+                                } else{
+                                    removeProductFromCart(found.get(0));
+                                    System.out.println(found.get(0).getProductName() + " removed from cart!");
+                                }
+                            case 3:
+                                productScreen2 = false;
+                                break;
                         }
 
                     }
@@ -214,14 +227,15 @@ public class OnlineStoreApp {
     // user can search the product by department
     public static ArrayList<Product> searchByProductDepartment (String productDepartment) {
         ArrayList<Product> results = new ArrayList <>();
-        for(Product product: productList){
+        for(Product product: cartList){
             if(product.getDepartment().toLowerCase().contains(productDepartment.toLowerCase())){
                 results.add(product);
             }
-            if (results.isEmpty()){
-                System.out.println("No products found in that department");
-            }
         }
+        if (results.isEmpty()){
+            System.out.println("No products found in that department");
+        }
+
         return results;
     }
 
