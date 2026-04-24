@@ -8,7 +8,10 @@ import java.util.Scanner;
 
 
 public class OnlineStoreApp {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
+        try {
+            productList = getProductList();
+
         boolean run = true;
         while (run) {
             Scanner input = new Scanner(System.in);
@@ -21,9 +24,6 @@ public class OnlineStoreApp {
 
             switch (choice) {
                 case 1:
-                    System.out.println("----Products List----");
-                    productList = getProductList();
-                    System.out.println();
 
                     boolean productScreen = true;
 
@@ -41,7 +41,8 @@ public class OnlineStoreApp {
                         switch (choice2) {
                             case 1:
                                 System.out.print("Enter product name: ");
-                                String productName = input.next();
+                                input.nextLine();
+                                String productName = input.nextLine();
                                 ArrayList<Product> results = searchByProductName(productName);
                                 for(Product p : results){
                                     System.out.println(p);
@@ -50,7 +51,8 @@ public class OnlineStoreApp {
 
                             case 2:
                                 System.out.print("Enter product department: ");
-                                String productDepartment = input.next();
+                                input.nextLine();
+                                String productDepartment = input.nextLine();
                                 ArrayList<Product> results2 = searchByProductDepartment(productDepartment);
                                 for(Product p : results2){
                                     System.out.println(p);
@@ -66,7 +68,7 @@ public class OnlineStoreApp {
                                 break;
 
                             case 4:
-                                System.out.println("What product would you like to add to cart?(enter name)");
+                                System.out.print("What product would you like to add to cart?(enter name)");
                                 input.nextLine();
                                 String productName1 = input.nextLine();
                                 ArrayList<Product> found = searchByProductName(productName1);
@@ -108,7 +110,11 @@ public class OnlineStoreApp {
             }
 
         }
-
+       }catch (IOException e){
+            System.out.println(e.getMessage());
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 
     //reading the list of products
