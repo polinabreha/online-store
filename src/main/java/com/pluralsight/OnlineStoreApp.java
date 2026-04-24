@@ -42,18 +42,13 @@ public class OnlineStoreApp {
        }
 
 
-
+// add ad remove methods
     static ArrayList<Product> cartList = new ArrayList<>();
-    public static void  addProductToCart(Product product){
-
-
-
-
-
-    }
-
+        public static void  addProductToCart(Product product){
+          cartList.add(product);
+        }
        public static void removeProductFromCart(Product product){
-
+        cartList.remove(product);
        }
 
 
