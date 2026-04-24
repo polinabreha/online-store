@@ -24,7 +24,75 @@ public class OnlineStoreApp {
                     System.out.println("----Products List----");
                     productList = getProductList();
                     System.out.println();
+
+                    boolean productScreen = true;
+
+                    while (productScreen) {
+                        System.out.println("---What would you like to do?---");
+                        System.out.println("1 - Search by Name");
+                        System.out.println("2 - Search by Department");
+                        System.out.println("3 - Search by Price");
+                        System.out.println("4 - Add to cart");
+                        System.out.println("5 - Go back");
+                        System.out.print("Enter your choice: ");
+                        int choice2 = input.nextInt();
+
+
+                        switch (choice2) {
+                            case 1:
+                                System.out.print("Enter product name: ");
+                                String productName = input.next();
+                                ArrayList<Product> results = searchByProductName(productName);
+                                for(Product p : results){
+                                    System.out.println(p);
+                                }
+                                break;
+
+                            case 2:
+                                System.out.print("Enter product department: ");
+                                String productDepartment = input.next();
+                                ArrayList<Product> results2 = searchByProductDepartment(productDepartment);
+                                for(Product p : results2){
+                                    System.out.println(p);
+                                }
+                                break;
+                            case 3:
+                                System.out.print("Enter product price: ");
+                                double productPrice = input.nextDouble();
+                                ArrayList<Product> results3 = searchByProductPrice(productPrice);
+                                for(Product p : results3){
+                                    System.out.println(p);
+                                }
+                                break;
+
+                            case 4:
+                                System.out.println("What product would you like to add to cart?(enter name)");
+                                input.nextLine();
+                                String productName1 = input.nextLine();
+                                ArrayList<Product> found = searchByProductName(productName1);
+
+                                if(found.isEmpty()){
+                                    System.out.println("Product not found");
+                                } else {
+                                    addProductToCart(found.get(0)); // adds the first matched product
+                                    System.out.println(found.get(0).getProductName() + " added to cart!");
+                                }
+                                break;
+
+                            case 5:
+                                productScreen = false;
+                                break;
+
+
+
+                        }
+                    }
+
+
+
                     break;
+
+
 
                 case 2:
                     System.out.println("----Cart----");
