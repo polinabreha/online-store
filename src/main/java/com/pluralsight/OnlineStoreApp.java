@@ -12,15 +12,18 @@ public class OnlineStoreApp {
         boolean run = true;
         while (run) {
             Scanner input = new Scanner(System.in);
+            System.out.println("-----WELCOME IN OUR ONLINE STORE -----");
             System.out.println("1 - Display Products");
             System.out.println("2 - Display Cart");
             System.out.println("3 - Exit");
+            System.out.print("Please enter your choice: ");
             int choice = input.nextInt();
 
             switch (choice) {
                 case 1:
                     System.out.println("----Products List----");
                     productList = getProductList();
+                    System.out.println();
                     break;
 
                 case 2:
@@ -69,7 +72,36 @@ public class OnlineStoreApp {
         return results;
        }
 
-// add ad remove methods
+    // user can search the product by department
+    public static ArrayList<Product> searchByProductDepartment (String productDepartment) {
+        ArrayList<Product> results = new ArrayList <>();
+        for(Product product: productList){
+            if(product.getDepartment().toLowerCase().contains(productDepartment.toLowerCase())){
+                results.add(product);
+            }
+            if (results.isEmpty()){
+                System.out.println("No products found in that department");
+            }
+        }
+        return results;
+    }
+
+    // user can search the product by price
+    public static ArrayList<Product> searchByProductPrice (double productPrice) {
+        ArrayList<Product> results = new ArrayList <>();
+        for(Product product: productList){
+            if(product.getPrice() <= productPrice){
+                results.add(product);
+            }
+            if (results.isEmpty()){
+                System.out.println("No products found at that price");
+            }
+        }
+        return results;
+    }
+
+
+// add and remove methods
     static ArrayList<Product> cartList = new ArrayList<>();
         public static void  addProductToCart(Product product){
           cartList.add(product);
