@@ -3,7 +3,6 @@ package com.pluralsight;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.sql.SQLOutput;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -114,62 +113,57 @@ public class OnlineStoreApp {
                         System.out.println("3. Go Back");
                         int choice2 = input.nextInt();
                         double total = 0;
+                        double change = 0.00;
+
                         switch (choice2) {
                             case 1:
                                 for (Product product : cartList) {
                                    total += product.getPrice();
                                 }
                                 System.out.println("Your total is : $ " + total);
-
-
-
-
-
-
-
-
-
                                 System.out.print("Enter cash amount : $ ");
                                 input.nextLine();
-                                double change = 0.00;
-                                Double cashAmount = input.nextDouble();
-                                if (cashAmount < total){
-                                    System.out.println("It's not enough money!");
-                                }else if (cashAmount > total){
-                                    change = cashAmount - total;
-                                    System.out.println("The change is : $ " + change);
-                                    System.out.println("Thank you for using our store.");
-                                } else if (cashAmount == total) {
-                                    System.out.println("The change is : $ " + change);
-                                    System.out.println("Thank you for using our store.");
-                                }
+                                double cashAmount = input.nextDouble();
 
-                                LocalDateTime today = LocalDateTime.now();
-                                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-                                System.out.println("-----RECEIPT-----");
-                                System.out.println("Date: " + today.format(dtf));
-                                System.out.println("--Items--");
-                                for(Product product : cartList){
-                                    System.out.println(product);
-                                }
-                                System.out.println("Total: $" + total);
-                                System.out.println("Amount Paid: $" + cashAmount);
-                                System.out.println("Change: $" + change);
+                              boolean paymentSuccess = false;
+                              while (!paymentSuccess) {
+                                  if (cashAmount < total) {
+                                      System.out.println("Not enough! You need $" + (total - cashAmount) + " more");
+                                      System.out.println("1 - Try again");
+                                      System.out.println("2 - Go back");
+                                      int retryChoice = input.nextInt();
+                                      if(retryChoice == 2){
+                                          break;
+                                      }
+                                  } else if (cashAmount > total) {
+                                      change = cashAmount - total;
+                                      System.out.println("The change is : $ " + change);
+                                      System.out.println("Thank you for using our store.");
+                                  } else if (cashAmount == total) {
+                                      System.out.println("The change is : $ " + change);
+                                      System.out.println("Thank you for using our store.");
+                                  }else {
+                                      LocalDateTime today = LocalDateTime.now();
+                                      DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+                                      System.out.println("-----RECEIPT-----");
+                                      System.out.println("Date: " + today.format(dtf));
+                                      System.out.println("--Items--");
+                                      for(Product product : cartList){
+                                          System.out.println(product);
+                                      }
+                                      System.out.println("Total: $" + total);
+                                      System.out.println("Amount Paid: $" + cashAmount);
+                                      System.out.println("Change: $" + change);
 
+                                      paymentSuccess = true;
+                                      cartList.clear();
+                                  }
 
+                              }
 
                         }
 
                     }
-
-
-
-
-
-
-
-
-
                     break;
 
                 case 3:
