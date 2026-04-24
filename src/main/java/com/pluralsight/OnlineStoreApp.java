@@ -4,6 +4,7 @@ import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 
@@ -11,10 +12,9 @@ public class OnlineStoreApp {
     public static void main(String[] args) {
         try {
             productList = getProductList();
-
+            Scanner input = new Scanner(System.in);
         boolean run = true;
         while (run) {
-            Scanner input = new Scanner(System.in);
             System.out.println("-----WELCOME IN OUR ONLINE STORE -----");
             System.out.println("1 - Display Products");
             System.out.println("2 - Display Cart");
@@ -76,7 +76,7 @@ public class OnlineStoreApp {
                                 if(found.isEmpty()){
                                     System.out.println("Product not found");
                                 } else {
-                                    addProductToCart(found.get(0)); // adds the first matched product
+                                    addProductToCart(found.get(0));
                                     System.out.println(found.get(0).getProductName() + " added to cart!");
                                 }
                             break;
@@ -99,8 +99,12 @@ public class OnlineStoreApp {
                 case 2:
                     System.out.println("----Cart----");
                     System.out.println("--Products:--");
+                    ArrayList<String> displayed = new ArrayList<>();
                     for (Product product : cartList) {
-                        System.out.println(product);
+                        if (!displayed.contains(product.getSKU())) {
+                            System.out.println(product + " x" + cartQuantity.get(product.getSKU()));
+                            displayed.add(product.getSKU());
+                        }
                     }
 
                     boolean productScreen2 = true;
@@ -147,8 +151,12 @@ public class OnlineStoreApp {
                                       System.out.println("-----RECEIPT-----");
                                       System.out.println("Date: " + today.format(dtf));
                                       System.out.println("--Items--");
+                                      ArrayList<String> displayed2 = new ArrayList<>();
                                       for(Product product : cartList){
-                                          System.out.println(product);
+                                          if(!displayed2.contains(product.getSKU())){
+                                              System.out.println(product + " x" + cartQuantity.get(product.getSKU()));
+                                              displayed2.add(product.getSKU());
+                                          }
                                       }
                                       System.out.println("Total: $" + String.format("%.2f", total));
                                       System.out.println("Amount Paid: $" + String.format("%.2f", cashAmount));
@@ -157,6 +165,7 @@ public class OnlineStoreApp {
 
                                       paymentSuccess = true;
                                       cartList.clear();
+                                      cartQuantity.clear();
                                       productScreen2 = false;
                                   }
                               }
@@ -255,12 +264,26 @@ public class OnlineStoreApp {
 
 
 // add and remove methods
+     static HashMap<String, Integer> cartQuantity = new HashMap<>();
     static ArrayList<Product> cartList = new ArrayList<>();
         public static void  addProductToCart(Product product){
           cartList.add(product);
+            String sku = product.getSKU();
+            if (cartQuantity.containsKey(sku)) {
+                cartQuantity.put(sku, cartQuantity.get(sku) + 1);
+            } else {
+                cartQuantity.put(sku, 1);
+            }
         }
        public static void removeProductFromCart(Product product){
+           String sku = product.getSKU();
+           if (cartQuantity.get(sku) > 1) {
+               cartQuantity.put(sku, cartQuantity.get(sku) - 1); // decrease quantity
+           } else {
+               cartQuantity.remove(sku); // remove completely
+           }
         cartList.remove(product);
+
        }
 
        public static void saveReceipt(ArrayList<Product> cartList, double total, double cashAmount, double change) throws IOException{
@@ -273,8 +296,12 @@ public class OnlineStoreApp {
           bufferedWriter.write("------RECEIPT------\n");
            bufferedWriter.write("Date: " + today.format(dtf) + "\n");
            bufferedWriter.write("--Items--\n");
-           for (Product product : cartList) {          // <-- make sure this loop is there
-               bufferedWriter.write(product + "\n");
+           ArrayList<String> displayed = new ArrayList<>();
+           for (Product product : cartList) {
+               if (!displayed.contains(product.getSKU())) {
+                   bufferedWriter.write(product + " x" + cartQuantity.get(product.getSKU()) + "\n");
+                   displayed.add(product.getSKU());
+               }
            }
            bufferedWriter.write("Total: $" + String.format("%.2f", total) + "\n");
            bufferedWriter.write("Amount Paid: $" + String.format("%.2f", cashAmount) + "\n");
